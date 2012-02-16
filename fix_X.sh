@@ -1,5 +1,7 @@
 #!/bin/sh
+# Script fixing x11-drivers after xserver xorg update
+# from gentoo wiki http://de.gentoo-wiki.com/wiki/X.Org/Upgrade
 
-echo "Fixing xf86-modules..."
+echo "Query and fix installed xf86-modules..."
 echo ""
-emerge -1v xf86-video-intel xf86-input-keyboard xf86-input-evdev xf86-input-synaptics xf86-input-mouse
+qlist -I -C x11-drivers/ | xargs emerge -1v
