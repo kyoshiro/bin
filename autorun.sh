@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
 
 function run {
-  if ! pgrep -f $1 ;
+  if ! pgrep -f $1$ ;
   then
     $@&
   fi
 }
 
-run nm-applet
+run ibus-daemon
 run autolock
+run nm-applet
 run rxvt-unicode
 run gvim
 run firefox
 run evolution
+
 if [ $USER == "rasendorf" ]; then
-	run rocketchat-desktop
+	run rambox
 	run gtimelog
+	run arandr
 fi
 if [ $USER != "rasendorf" ]; then
 	run google-play-music-desktop-player
