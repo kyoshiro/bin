@@ -4,5 +4,6 @@
 /var/tmp
 /home
 /proc
+/run
 /dev
 /sys

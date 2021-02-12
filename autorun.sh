@@ -10,15 +10,15 @@ function run {
 run ibus-daemon
 run autolock
 run nm-applet
+run blueman-applet
 run rxvt-unicode
+run gnome-keyring-daemon --unlock
 run gvim
 run firefox
 run evolution
 
 if [ $USER == "rasendorf" ]; then
-	run rambox
 	run gtimelog
-	run arandr
 fi
 if [ $USER != "rasendorf" ]; then
 	run google-play-music-desktop-player
