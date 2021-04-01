@@ -2,7 +2,7 @@
 
 plugdir=~/dev/git/vimplugins
 
-for plug in `cat ~/dev/git/configfiles/vim.plugins.urls`
+for plug in `cat ~/dev/git/dotfiles/vim.plugins.urls`
 	do
 		plugname=$(echo $plug | sed -e 's,https://.*/\(.*\).git,\1,g')
 		echo "This plugin: $plugname";
