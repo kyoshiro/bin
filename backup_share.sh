@@ -3,7 +3,7 @@
 timestamp_start=`date "+%Y%m%d_%H%M%S"`
 
 backup_source="share"
-backup_source_root="/raid"
+backup_source_root="/srv/"
 backup_source_file=$backup_source_root"/"$backup_source"/"
 backup_dest_root="/rescue"
 backup_dest_file=$backup_dest_root"/"$backup_source"-"$timestamp_start

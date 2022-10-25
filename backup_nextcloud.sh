@@ -1,51 +1,27 @@
 #!/bin/sh
 # set -x
 timestamp_start=`date "+%Y%m%d_%H%M%S"`
+hostname=$(hostnamectl hostname)
 
 backup_source="nextcloud"
-backup_source_root="/raid"
-backup_source_file=$backup_source_root"/srv/"$backup_source"/"
-backup_dest_root="/rescue"
-backup_dest_file=$backup_dest_root"/"$backup_source"-"$timestamp_start
-backup_dest_dbfile=$backup_dest_root"/"$backup_source"-sql-"$timestamp_start".bak"
-backup_dest_link=$backup_dest_root"/"$backup_source"-current"
-backup_logfile=$backup_dest_file".log"
+backup_source_root="/srv/docker/data"
+backup_source_file=$backup_source_root"/"$backup_source"/"
 
-#Check mount point /rescue , mount if needed
-if [ ! -z "$(cat /proc/mounts | grep -qs $backup_dest_root)" ]; then
-	if [ ! $(mount $backup_dest_root) ] ; then
-		# If mount $backup_dest_root failes exit here
-		echo "Backup  failed! $backup_dest_root not mounted" | mail -s "Backup $backup_source on $timestamp_start failed" root
-		exit 1
-	fi
-fi
-if [ ! -e $backup_source_file ]; then
-	# if $backup_source_file does not exist exit here
-	echo "Backup $backup_source failed! $backup_source_file does not exist!" | mail -s "Backup of $backup_source on $timestamp_start failed" root
-	exit 1
-fi
-echo "Backup of $backup_source started" | mail -s "Backup of $backup_source on $timestamp_start started" root
-if [ ! -L $backup_dest_link ]; then
-	echo "Backup $backup_source failed! $backup_dest_link does not exist!" | mail -s "Backup of $backup_source on $timestamp_start failed" root
-	exit 1
-fi
+backup_excludes="exclude_dirs_nextcloud"
+
+backup_dest_root="/rescue/backup"
+PASSWORD=$(cat .nextcloud.secret)
+DAY=$(date +%a)
+ARCH_FILE=$backup_dest_root/$timestamp_start-$hostname-$backup_source.tar
+DB_ARCH_FILE=$backup_dest_root/$timestamp_start-$hostname-$backup_source-sql.bak
+SNAR_FILE=$backup_dest_root/$hostname-$backup_source.snar
+SAVE_SNAR_FILE=$backup_dest_root/$(date --date '7 days ago' +%Y%m%d_%H%M)-$hostname-$backup_source.snar
+
 # Doing backup
+# Set password in secrets file before use
+docker exec nextcloud-db /usr/bin/mysqldump --single-transaction -u nextcloud --password=$PASSWORD nextcloud > $DB_ARCH_FILE
 
-# Please change password before use
-
-mysqldump --single-transaction -h localhost -u nextcloud -pYOUR_PASSWORD_HERE nextcloud > $backup_dest_dbfile
-if [ "$?" -ne "0" ]; then
-	echo "Backup $backup_source failed! Mysqldump terminated with error!" | mail -s "Backup of $backup_source on $timestamp_start failed" root
-	exit 1
+if [ $DAY = 'Mon' ]; then
+	test -e $SNAR_FILE && mv $SNAR_FILE $SAVE_SNAR_FILE
 fi
-rsync -Aax --log-file=$backup_logfile --link-dest=$backup_dest_link $backup_source_file $backup_dest_file
-if [ "$?" -ne "0" ]; then
-	echo "Backup $backup_source failed! Rsync terminated with error!" | mail -s "Backup of $backup_source on $timestamp_start failed" root
-	exit 1
-fi
-rm -f $backup_dest_link
-ln -s $backup_dest_file $backup_dest_link
-sync
-umount $backup_dest_root
-timestamp_finish=`date "+%Y%m%d_%H%M%S"`
-echo "Backup $backup_source finished" | mail -s "Backup $backup_source on $timestamp_finish finished." root
+tar -cSivp -g $SNAR_FILE --numeric-owner -X $backup_excludes -f - $backup_source_file | split -d -b 4G - $ARCH_FILE 
