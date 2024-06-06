@@ -12,10 +12,8 @@ run autolock
 run nm-applet
 run blueman-applet
 run rxvt-unicode
-run gnome-keyring-daemon --unlock
-run gvim
 run firefox
-run evolution
+run thunderbird
 
 if [ $USER == "rasendorf" ]; then
 	run gtimelog

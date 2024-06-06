@@ -6,4 +6,4 @@ LOCKSCREENIMG="$HOME/.config/sway/wallpaper.img"
 
 #exec xautolock -detectsleep -time 10 -locker "i3lock -t -i $LOCKSCREENIMG" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'LOCKING screen in 30 seconds'"
 
-swaylock -c 0c0c0c -t -i $LOCKSCREENIMG
+swaylock -c 0c0c0c  -i $LOCKSCREENIMG
