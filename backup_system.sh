@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 timestamp_start=`date "+%Y%m%d_%H%M%S"`
 hostname=$(hostnamectl hostname)
 
@@ -14,15 +14,9 @@ ARCH_FILE=$backup_dest_root/$timestamp_start-$hostname-$backup_source.tar.bz2
 SNAR_FILE=$backup_dest_root/$hostname-$backup_source.snar
 SAVE_SNAR_FILE=$backup_dest_root/$(date --date '7 days ago' +%Y%m%d_%H%M)-$hostname-$backup_source.snar
 
-DAY=$(date +%a)
-ARCH_FILE=$backup_dest_root/$(date +%Y%m%d_%H%M)-$hostname-system.tar.bz2
-SNAR_FILE=$backup_dest_root/$hostname-system.snar
-SAVE_SNAR_FILE=$backup_dest_root/$(date --date '7 days ago' +%Y%m%d_%H%M)-${SNAR}
-
-if [ $DAY = 'Mon' ]; then
+if [ $DAY = 'Fri' ]; then
 	test -e $SNAR_FILE && mv $SNAR_FILE $SAVE_SNAR_FILE
 fi
-mount /boot/efi
 
 tar -cSjp -g $SNAR_FILE --numeric-owner --atime-preserve -X exclude_dirs -f - / | split -d -b 2G - $ARCH_FILE
 

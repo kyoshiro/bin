@@ -4,8 +4,10 @@ timestamp_start=`date "+%Y%m%d_%H%M%S"`
 hostname=$(hostnamectl hostname)
 
 backup_source="nextcloud"
-backup_source_root="/srv/docker/data"
+backup_source2="nextcloud-db"
+backup_source_root="/srv/containers/data"
 backup_source_file=$backup_source_root"/"$backup_source"/"
+backup_source_file2=$backup_source_root"/"$backup_source2"/"
 
 backup_excludes="exclude_dirs_nextcloud"
 
@@ -19,9 +21,9 @@ SAVE_SNAR_FILE=$backup_dest_root/$(date --date '7 days ago' +%Y%m%d_%H%M)-$hostn
 
 # Doing backup
 # Set password in secrets file before use
-docker exec nextcloud-db /usr/bin/mysqldump --single-transaction -u nextcloud --password=$PASSWORD nextcloud > $DB_ARCH_FILE
+sudo -u rootless bash -c "podman exec nextcloud-db /usr/bin/mysqldump --single-transaction -u nextcloud --password=$PASSWORD nextcloud > $DB_ARCH_FILE"
 
-if [ $DAY = 'Mon' ]; then
+if [ $DAY = 'Fri' ]; then
 	test -e $SNAR_FILE && mv $SNAR_FILE $SAVE_SNAR_FILE
 fi
-tar -cSivp -g $SNAR_FILE --numeric-owner -X $backup_excludes -f - $backup_source_file | split -d -b 4G - $ARCH_FILE 
+tar -cSivp -g $SNAR_FILE --numeric-owner -X $backup_excludes -f - $backup_source_file $backup_source_file2 | split -d -b 4G - $ARCH_FILE
