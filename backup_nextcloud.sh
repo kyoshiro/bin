@@ -11,7 +11,8 @@ backup_source_file2=$backup_source_root"/"$backup_source2"/"
 
 backup_excludes="exclude_dirs_nextcloud"
 
-backup_dest_root="/rescue/backup"
+backup_dest_root="/media/$USER/RESCUE"
+
 PASSWORD=$(cat .nextcloud.secret)
 DAY=$(date +%a)
 ARCH_FILE=$backup_dest_root/$timestamp_start-$hostname-$backup_source.tar

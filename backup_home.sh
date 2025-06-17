@@ -7,7 +7,7 @@ backup_source="home"
 backup_source_root="/"
 backup_source_file=$backup_source_root"/"$backup_source"/"
 
-backup_dest_root="/rescue/backup"
+backup_dest_root="/media/$USER/RESCUE"
 
 DAY=$(date +%a)
 ARCH_FILE=$backup_dest_root/$timestamp_start-$hostname-$backup_source.tar.bz2
