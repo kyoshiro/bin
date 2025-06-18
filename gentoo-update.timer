@@ -1,0 +1,10 @@
+[Unit]
+Description=Gentoo System Update-Timer
+
+[Timer]
+OnCalendar=15:35
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+
