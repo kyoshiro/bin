@@ -3,8 +3,6 @@
 #
 LOGFILE="/var/log/emerge-update.log"
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
-USER_TO_NOTIFY="rasendorf"
-
 
 for user in $(who | awk '{print $1}' | sort -u); do
     uid=$(id -u "$user")
