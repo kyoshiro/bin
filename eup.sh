@@ -2,7 +2,6 @@
 # This script automates the update process
 #
 LOGFILE="/var/log/emerge-update.log"
-DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
 for user in $(who | awk '{print $1}' | sort -u); do
     uid=$(id -u "$user")
@@ -10,11 +9,12 @@ for user in $(who | awk '{print $1}' | sort -u); do
     export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
 
     sudo -u "$user" DISPLAY=$DISPLAY DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
-    notify-send "🔄 Systemupdate started..."
+    notify-send -a "Emerge" "System Update" "🔄 Systemupdate started..."
 done
 
 {
     args=$@
+    DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
     echo " --- $DATE ---"
     echo "ℹ️ Running portage sync and update process..."
@@ -37,6 +37,7 @@ done
     echo "💡 It's safe to run 'emerge --depclean -a' now."
     echo ""
     echo "🍻 Happy 🐧 Gentoo'ing..."
+    DATE=$(date '+%Y-%m-%d %H:%M:%S')
     echo " --- $DATE ---"
 } >> "$LOGFILE" 2>&1
 
@@ -46,7 +47,7 @@ for user in $(who | awk '{print $1}' | sort -u); do
     export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
 
     sudo -u "$user" DISPLAY=$DISPLAY DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
-    notify-send "✅ Systemupdate finished, for more info, see log file $LOGFILE."
+    notify-send -a "Emerge" "System Update" "✅ Systemupdate finished, for more info, see log file $LOGFILE."
 
 done
 

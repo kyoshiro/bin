@@ -2,7 +2,7 @@
 Description=Gentoo System Update-Timer
 
 [Timer]
-OnCalendar=15:35
+OnCalendar=12:00
 Persistent=true
 
 [Install]
