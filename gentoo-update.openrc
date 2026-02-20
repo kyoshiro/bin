@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+# Copyright 2026 Roman Asendorf
+# Distributed under the terms of the BSD License
+
+description="Gentoo system update via emerge"
+
+depend() {
+	after net
+}
+
+command="/usr/local/bin/eup.sh"
+command_background="no"
