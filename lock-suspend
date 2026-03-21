@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if command -v systemctl &> /dev/null; then
   lock & systemctl suspend
 else

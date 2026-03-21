@@ -6,7 +6,7 @@ LOGFILE="/var/log/emerge-update.log"
 for user in $(who | awk '{print $1}' | sort -u); do
     uid=$(id -u "$user")
     export DISPLAY=:0
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus"
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/dbus-1"
 
     sudo -u "$user" DISPLAY=$DISPLAY DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
     notify-send -a "Emerge" "System Update" "🔄 Systemupdate started..."
