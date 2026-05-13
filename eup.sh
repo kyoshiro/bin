@@ -23,12 +23,14 @@ done
     DATE=$(date '+%Y-%m-%d %H:%M:%S')
     echo " --- $DATE ---"
     echo "ℹ️ Running portage sync and update process..."
-    echo "🔄 Starting sync... skipping on yukimura"
+    echo ""
     echo "🐛 notifying user $user, $uid"
     echo "🐛 found PID=$pid"
     echo "🐛 using env DISPLAY=$DISPLAY"
     echo "🐛 using env XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"
     echo "🐛 using env DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS"
+    echo ""
+    echo "🔄 Starting sync... skipping on yukimura"
     if ! [ `hostname` == "yukimura.iot.intern" ]; then
     	eix-sync || (echo "⚠️ Sync failed. Canceling further actions."; exit 1)
     	echo "✅ Sync completed..."
