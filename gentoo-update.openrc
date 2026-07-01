@@ -4,9 +4,27 @@
 
 description="Gentoo system update via emerge"
 
+command="/usr/local/bin/eup.sh"
+command_background="yes"
+pidfile="/run/$\{RC\_SVCNAME\}.pid"
+
 depend() {
 	after net
 }
 
-command="/usr/local/bin/eup.sh"
-command_background="no"
+start() {
+    ebegin "Starting update service"
+    supervise-daemon "${RC_SVCNAME}" \
+        --start \
+        --pidfile "${pidfile}" \
+        -- "${command}"
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping update service"
+    supervise-daemon "${RC_SVCNAME}" \
+        --stop \
+        --pidfile "${pidfile}"
+    eend $?
+}

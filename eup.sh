@@ -19,7 +19,6 @@ for user in $(who | awk '{print $1}' | sort -u); do
 done
 
 {
-    args=$@
     DATE=$(date '+%Y-%m-%d %H:%M:%S')
     echo " --- $DATE ---"
     echo "ℹ️ Running portage sync and update process..."
@@ -38,7 +37,7 @@ done
     echo "🔄 Checking known vulnerabilities..."
     glsa-check --list
     echo "🔄 Starting update..."
-    emerge -DuvN $args --with-bdeps=y @world || echo "❌ Updated failed due to above error."
+    emerge -DuvN --with-bdeps=y @world || echo "❌ Updated failed due to above error."
     echo "📦 Running emerge @preserved-rebuild..."
     emerge @preserved-rebuild
     echo "🧹 Cleaning unnecessary distfiles..."
